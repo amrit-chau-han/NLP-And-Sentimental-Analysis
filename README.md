@@ -12,9 +12,58 @@ In regression tasks, where the goal is to forecast continuous outputs, there are
 **Unsupervised Learning: Clustering and Dimensionality Reduction**
 Unsupervised learning is a type of ML applied when the data is unlabeled, hence suitable for discovering hidden patterns, groups, or structures. A well-known technique, K-Means clustering, clusters data points into 'K' clusters by distributing each point to the nearest centroid and iteratively updating the centroids to reduce intra-cluster variance. It is applied in customer segmentation, market basket analysis, or detecting anomalies. Principal Component Analysis (PCA), by contrast, is a dimensionality reduction method that maps high-dimensional data onto fewer orthogonal components that capture most of the variance present in the original data. PCA makes visualization easier, makes computation more efficient, and tends to reduce noise, which makes it useful as a preprocessing and exploratory data analysis tool.
 
-** Model Selection Based on Problem Characteristics**
+**Model Selection Based on Problem Characteristics**
 The selection of the appropriate machine learning model is based on many considerations, including dataset size, feature intricacy, and problem type. There is no single model; various algorithms work better under varied circumstances. Support Vector Machines and neural networks, for example, might produce high accuracy in intricate tasks of classification but are computationally intensive and need tuning. Weaker models such as logistic regression could actually have slightly lower raw accuracy but would be faster and easier to interpret. In a similar way, there may also be situations where a linear regression model is better than a neural network—like in bike-sharing demand prediction—since the structure of the problem lends itself more naturally to linear relationships. This emphasizes the significance of empirical verification and hyperparameter optimization to identify the optimal solution to a specific problem.
 
+**Sentimental Analysis**
+1. Vocabulary
+Vocabulary in NLP is simply the whole set of individual words contained in a dataset. When we are looking at an array of text—like movie reviews or tweets—we initially collect all of the individual words across the dataset in preparation for creating this vocabulary. For example, in "I love this movie" and "This movie is boring," the vocabulary would be "I", "love", "this", "movie", "is", and "boring." Vocabulary is important because each one of these will be mapped into features that allow a machine learning model to learn about patterns in text. In sentiment analysis, certain words like "excellent" or "terrible" develop high sentiment and become valuable words of the vocabulary.
+
+2. Feature Extraction
+Feature extraction in NLP is the process of converting text data into numeric data that can be processed and interpreted by machine learning algorithms. A common one is the Bag of Words (BoW) model, which determines how often each word in the vocabulary appears in a document or sentence. Each word is treated as a feature and the number of times each word appears is counted in a vector. For example, the sentence "This movie is amazing" might be represented by a vector showing that the words "this", "movie", "is", and "amazing" all appear once. With this numerical representation, the model can spot patterns and make predictions about the sentiment of the text.
+
+3. Sparse Representations and Their Issues
+When employing methods like Bag of Words, every sentence is represented as a vector of the same dimension as the entire vocabulary. In it, most of the values are zeros because each sentence is employing only a handful of words. This leads to so-called sparse representation, i.e., most space in the vector is filled with zeros. For example, if a dictionary contains 10,000 words and a sentence uses only 5 of them, 9,995 values in its feature vector will be zero. Sparse representations are not desirable because they use a lot of memory, make computations expensive, and complicate model learning. They also rule out word order and context, which are often important in understanding language and meaning.
+
+4. Positive and Negative Frequencies
+In sentiment analysis, examining the frequency of words in positive and negative text can be used to determine which words are highly correlated with particular emotions. For example, if the word "awesome" occurs 90 times in positive reviews and 3 times in negative reviews, it is probably a positive word. Conversely, if "boring" occurs primarily in negative critiques, it is an indicator of negativity. Tracking such positive and negative frequencies proves helpful in distributing sentiment scores to words, which further allows models to learn the emotional tone of a given text more effectively.
+
+5. Feature Extraction from Frequency
+Having data on how often words appear in positive or negative texts, we can use such frequencies as features for our model. For example, "excellent" can be found mostly in positive ratings, therefore whenever it appears in a novel rating, the model reads it as a strong signal of positivity. We can create feature vectors based on these frequencies where high is a word that contains strong emotions. More advanced techniques like TF-IDF not only consider the frequency of a word, but also how common or typical it is in all documents, helping to place more weight on significant words and reduce the influence of generic words.
+
+6. Preprocessing (Punctuation removal, etc.)
+Before text is converted to features, we need to clean it with preprocessing. These are accomplished through a project of several steps consisting of conversion to and removal of punctuation and lowercase, and wiping out frequent but unimportant words referred to as stopwords (e.g., "the", "is", "and"). Stemming or lemmatization can also be used to reduce words to their root form—for example, cutting "running", "ran", and "runs" to "run". Tokenization, or text breaking into words, is another essential step. For example, the statement "I LOVED this movie!" may be preprocessed into ["love", "movie"], thus only processing the relevant content by the model.
+
+7. Logistic Regression and Supervised Learning
+Supervised learning is one of the types of machine learning where models are trained from data that includes the inputs as well as the labeled outputs. In sentiment analysis, this would involve training the model on positive or negative reviews. One of the most well-used algorithms to do this task is logistic regression since it's simple, fast, and efficient. Logistic regression works by taking in features (such as word counts or TF-IDF scores) and applying them to create a probability that the input sentence is positive. If the probability turns out to be high, the sentence is tagged as positive; if low, then as negative.
+
+8. Sigmoid Function
+Sigmoid function refers to the mathematical function used in logistic regression to map any real number to a probability between 0 and 1. This proves useful because it helps us interpret the model's output as a probability. The sigmoid function is: 1 / (1 + e^-x), and "x" is an expression computed from the input features and weights. When "x" is large and positive, the output of the sigmoid will be close to 1 (indicating high probability of being positive); when large and negative, the output will be close to 0 (indicating high probability of being negative). This enables the model to decide to what extent it is certain about a sentence's sentiment.
+
+**Naive Bayes and Log Likelihood**
+Naive bayes is an algorithm or to be more clear an approximation, is used for sentiment analysis because of tis simplicity and efficiency. It is based on Baye's theorem which states that the probability that an Event C occurs given that an event X has already happened is equal to probility of event X happening such that event C has already happened multiplied by the probility of event C occuring and divided by probility of event X. 
+
+Naive bayes makes a very naive assumption that the words present in the data set are conditionally independent so the bayes theorem gets converged to, P(x|c)= multiplication of all conditional probalities. Now notice that in this multiplication, there are chances we multiply a very small number so to avoid such things we simply take log of the right hand side. 
+
+Now there is one more possibility that there are some unseen words, so to handle that we apply laplacian smoothin which in return odifies the probility calcution to 
+P(Xi | C) = (count of (Xi in C) +1)/(total words in C +V) 
+where C is the total data set and V is the size of vocabulary. 
+
+**VECTOR SPACE MODEL FOR NLP**
+In Natural Language Processing (NLP), Vector Space Model (VSM) is a simple way to map text data into numbers so that machine learning algorithms can process it. In the model, any document (e.g., sentence, review, tweet) is mapped to a vector in an enormous number of dimensions such that each dimension represents a word in the vocabulary. The values for such vectors are typically word frequency or weighted values like TF-IDF (Term Frequency–Inverse Document Frequency). For example, for sentiment analysis, a review "This movie is amazing" is translated into a vector indicating the importance of each word in the sentence. The entire dataset is a matrix where documents make up rows and vocabulary words make up columns. Sentiment classification models like logistic regression or Naive Bayes can then use these vectors to recognize patterns and learn mappings of specific words (or combinations of words) and sentiment labels (positive or negative). While the basic VSM does not consider grammar or word order, it is simple, quick, and a solid starting point for most text classification tasks.
+
+Each word is represented as a vector of real numbers. For example: “king” → [0.21, 0.56, ..., 0.03], “queen” → [0.19, 0.58, ..., 0.07].
+In a word vector space, semantic relationships between words are often preserved geometrically. This allows you to do arithmetic on word meanings, such as:
+king -− man + woman ≈ queen
+This means that the vector difference between “king” and “man” is similar to the difference between “queen” and “woman.” These manipulations capture analogies and gender/semantic relationships.
+
+We measure similarity between these vectors spaces of words using simple cosine rule by taking cos of the angle between these two vectors. 
+Close to 1 → very similar (e.g., “happy” and “joyful”)
+Close to 0 → unrelated (e.g., “happy” and “car”)
+Negative → opposite meaning in some models
+
+**Principal Component Analysis (PCA)**
+Principal Component Analysis (PCA) is basically a dimensionality reduction method which reduces high-dimensional data that is the vector space of the words to lower numbers of new variables aka principal components that retain most of the variance of the original data. The key idea behind PCA is finding directions (components) where the data varies the most and re-converting the data to these directions. We first standardize the characteristics so that its components are all on a similar scale, then we compute the covariance matrix to determine the relationship of variables to each other. We then finds the eigenvectors and eigenvalues of the matrix—eigenvectors identify directions of new axes, and eigenvalues describe the amount of variance in each axis. The top 'k' eigenvectors with the largest eigenvalues are then selected and original data is projected onto this new lower-dimension space.
 
 
 
